@@ -1,0 +1,17 @@
+{
+  "name": "eosts-contracts",
+  "version": "1.0.0",
+  "description": "EOS contracts written in typescript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "asc contracts/**/*.ts -t build/untouched.wast -b build/untouched.wasm  --sourceMap --measure --noAssert --use abort="
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "assemblyscript": "github:AssemblyScript/assemblyscript",
+    "typescript": "^2.9.2"
+  }
+}
