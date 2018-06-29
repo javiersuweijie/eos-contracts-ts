@@ -1,0 +1,33 @@
+{
+  "version": "eosio::abi/1.0",
+  "structs": [
+    {
+      "name": "memos",
+      "base": "",
+      "fields": [
+        {"name":"account", "type":"name"},
+        {"name":"memo", "type":"string"}
+      ]
+    },
+    {
+      "name": "add",
+      "base": "",
+      "fields": [
+        {"name": "task", "type": "string"},
+        {}
+      ]
+    }
+  ],
+  "actions": [{
+      "name": "add",
+      "type": "add"
+    }],
+  "tables": [{
+        "name": "todo",
+        "type": "string",
+        "index_type": "i64",
+        "key_names" : ["task_name"],
+        "key_types" : ["name"]
+      }
+  ],
+}
