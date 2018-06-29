@@ -75,7 +75,6 @@ class TodoContract {
             let ds = new DataStream(changetype<usize>(arr.buffer), len);
             let last_todo = new Todo();
             last_todo.from_ds(ds);
-            //eos.prints(last_todo.to_string().toUTF8());
             key = last_todo.primary + 1;
         }
 
@@ -116,6 +115,14 @@ class TodoContract {
         eos.db_remove_i64(todo.iterator);
     }
 
+    assign(key : u64, assignee : u64) : void {
+        let todo = this.getTodoByKey(key);
+        require_auth(todo.creator);
+        todo.assignee = assignee;
+        let ds = todo.to_ds();
+        eos.db_update_i64(todo.iterator, todo.creator, changetype<usize>(ds.buffer), ds.pos);
+    }
+
     private getTodoByKey(key : u64) : Todo {
         let iterator = eos.db_find_i64(this.code, this.scope, this.table, key);
         let len = eos.db_get_i64(iterator, 0, 0);
@@ -148,6 +155,9 @@ export function apply(receiver: u64, code: u64, action: u64) : void {
     }
     else if (action == N('removeall')) {
         contract.removeAll();
+    }
+    else if (action == N('assign')) {
+        contract.assign(ds.read<u64>(), ds.read<u64>());
     }
     else {
         eos.prints(string2cstr("Action not found"));

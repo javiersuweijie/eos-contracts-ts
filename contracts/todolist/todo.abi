@@ -79,6 +79,20 @@
                     "type": "uint64"
                 }
             ]
+        },
+        {
+            "name": "assign",
+            "base": "",
+            "fields": [
+                {
+                    "name": "key",
+                    "type": "uint64"
+                },
+                {
+                    "name": "assignee",
+                    "type": "name"
+                }
+            ]
         }
     ],
     "actions": [
@@ -101,6 +115,10 @@
         {
             "name": "remove",
             "type": "remove"
+        },
+        {
+            "name": "assign",
+            "type": "assign"
         }
     ],
     "tables": [{
