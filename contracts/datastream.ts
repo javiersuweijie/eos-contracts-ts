@@ -19,7 +19,7 @@ export class DataStream {
     var value: u32 = 0;
     var shift: u32 = 0;
     do {
-      let b = this.read<u8>();
+      var b = this.read<u8>();
       value |= <u32>(b & 0x7f) << (7 * shift++);
     } while (b & 0x80);
     return value;
