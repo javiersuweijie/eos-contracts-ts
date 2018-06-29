@@ -1,0 +1,114 @@
+{
+    "version": "eosio::abi/1.0",
+    "structs": [
+        {
+            "name": "todo",
+            "base": "",
+            "fields": [
+                {
+                    "name": "primary",
+                    "type": "uint64"
+                },
+                {
+                    "name": "creator",
+                    "type": "name"
+                },
+                {
+                    "name": "assignee",
+                    "type": "name"
+                },
+                {
+                    "name": "completed",
+                    "type": "bool"
+                },
+                {
+                    "name": "task",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "add",
+            "base": "",
+            "fields": [
+                {
+                    "name": "task",
+                    "type": "string"
+                },
+                {
+                    "name": "creator",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "removeall",
+            "base": "",
+            "fields": []
+        },
+        {
+            "name": "get",
+            "base": "",
+            "fields": [ 
+                {
+                    "name": "key",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "update",
+            "base": "",
+            "fields": [ 
+                {
+                    "name": "key",
+                    "type": "uint64"
+                },
+                {
+                    "name": "completed",
+                    "type": "bool"
+                }
+            ]
+        },
+        {
+            "name": "remove",
+            "base": "",
+            "fields": [ 
+                {
+                    "name": "key",
+                    "type": "uint64"
+                }
+            ]
+        }
+    ],
+    "actions": [
+        {
+            "name": "add",
+            "type": "add"
+        },
+        {
+            "name": "removeall",
+            "type": "removeall"
+        },
+        {
+            "name": "get",
+            "type": "get"
+        },
+        {
+            "name": "update",
+            "type": "update"
+        },
+        {
+            "name": "remove",
+            "type": "remove"
+        }
+    ],
+    "tables": [{
+        "name": "todo",
+        "type": "todo",
+        "index_type": "i64",
+        "key_names" : ["primary"],
+        "key_types" : ["uint64"]
+      }
+  ]
+}
