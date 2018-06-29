@@ -5,8 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "asc contracts/**/*.ts -t build/untouched.wast -b build/untouched.wasm  --sourceMap --measure --noAssert --use abort=",
-    "release": "asc contracts/**/*.ts -t build/optimized.wast -b build/optimized.wasm -O3 --sourceMap --measure --noAssert --noDebug --use abort="
+
+    "build:helloworld": "asc contracts/helloworld/*.ts -t build/helloworld.untouched.wast -b build/helloworld.untouched.wasm  --sourceMap --measure --noAssert --use abort=",
+    "build:todolist": "asc contracts/todolist/*.ts -t build/todolist.untouched.wast -b build/todolist.untouched.wasm  --sourceMap --measure --noAssert --use abort=",
+    "build": "npm run build:helloworld && npm run build:todolist",
+
+    "release:helloworld": "asc contracts/helloworld/*.ts -t build/helloworld.untouched.wast -b build/helloworld.untouched.wasm -O3 --noDebug --sourceMap --measure --noAssert --use abort=",
+    "release:todolist": "asc contracts/todolist/*.ts -t build/todolist.untouched.wast -b build/todolist.untouched.wasm -O3 --noDebug --sourceMap --measure --noAssert --use abort=",
+    "release": "npm run release:helloworld && npm run release:todolist"
   },
   "author": "",
   "license": "ISC",
