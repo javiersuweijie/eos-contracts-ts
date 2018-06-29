@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "asc contracts/**/*.ts -t build/untouched.wast -b build/untouched.wasm  --sourceMap --measure --noAssert --use abort="
+    "build": "asc contracts/**/*.ts -t build/untouched.wast -b build/untouched.wasm  --sourceMap --measure --noAssert --use abort=",
+    "release": "asc contracts/**/*.ts -t build/optimized.wast -b build/optimized.wasm -O3 --sourceMap --measure --noAssert --noDebug --use abort="
   },
   "author": "",
   "license": "ISC",

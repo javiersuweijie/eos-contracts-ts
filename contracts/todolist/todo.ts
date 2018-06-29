@@ -1,8 +1,8 @@
 import 'allocator/arena';
 import * as eos from '../eoslib';
 import { DataStream } from '../datastream';
-import { get_ds, N, string2cstr, assert, Name} from '../utils';
-import { db_find_i64, printi, prints, require_auth } from '../eoslib';
+import { get_ds, N, assert, print, Name } from '../utils';
+import { db_find_i64, printi, require_auth } from '../eoslib';
 
 class Todo {
     primary: u64;
@@ -58,7 +58,7 @@ class TodoContract {
 
     get(key : u64) : void {
         let todo = this.getTodoByKey(key);
-        eos.prints(todo.to_string().toUTF8());
+        print(todo.to_string());
     }
 
     add(task : string, creator : u64) : void {
@@ -94,17 +94,17 @@ class TodoContract {
         while (iterator >= 0) {
             let del = iterator;
             iterator = eos.db_next_i64(iterator, changetype<usize>(this) + offsetof<this>("primary"));
-            //eos.prints("\nPrimary: ".toUTF8());
+            //print("\nPrimary: ");
             //eos.printi(this.primary);
             eos.db_remove_i64(del);
             i++;
           }
-        eos.prints("Removed ".toUTF8());
+        print("Removed ");
         eos.printi(i);
     }
 
     update(key : u64, completed : bool) : void {
-        let todo = this.getTodoByKey(key);        
+        let todo = this.getTodoByKey(key);
         require_auth(todo.creator);
         todo.completed = completed;
         let ds = todo.to_ds();
@@ -144,7 +144,7 @@ export function apply(receiver: u64, code: u64, action: u64) : void {
     let ds = get_ds();
     let contract = new TodoContract(receiver, code, action);
     if (action == N('add')) {
-       contract.add(ds.readString(), ds.read<u64>()); 
+       contract.add(ds.readString(), ds.read<u64>());
     }
     else if (action == N('get')) {
        contract.get(ds.readVarint32());
@@ -162,6 +162,6 @@ export function apply(receiver: u64, code: u64, action: u64) : void {
         contract.assign(ds.read<u64>(), ds.read<u64>());
     }
     else {
-        eos.prints(string2cstr("Action not found"));
+        print("Action not found");
     }
 }
