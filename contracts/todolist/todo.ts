@@ -93,7 +93,9 @@ class TodoContract {
         let i : i32 = 0;
         while (iterator >= 0) {
             let del = iterator;
-            iterator = eos.db_next_i64(iterator, offsetof<this>("primary"));
+            iterator = eos.db_next_i64(iterator, changetype<usize>(this) + offsetof<this>("primary"));
+            //eos.prints("\nPrimary: ".toUTF8());
+            //eos.printi(this.primary);
             eos.db_remove_i64(del);
             i++;
           }
