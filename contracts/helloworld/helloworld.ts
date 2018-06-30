@@ -1,6 +1,6 @@
 import 'allocator/arena';
 import * as eos from '../eoslib';
-import { Name, string2cstr} from '../utils';
+import { Name, print } from '../utils';
 import { DataStream } from '../datastream';
 
 class Message {
@@ -14,7 +14,7 @@ class Message {
     }
 
     print_message() : void {
-        eos.prints(string2cstr(this.memo));
+        print(this.memo);
         eos.printn(this.account.value);
     }
 }
