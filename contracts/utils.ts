@@ -55,7 +55,7 @@ export class Name {
     let start = false;
     for (let i = 0; i < 13; i++) {
       // let index = <i16>(tmp & (i == 0 ? 0x0f : 0x1f));
-      let index = <i16>(tmp & ((<u64>(i == 0) << 4) | 0xf));
+      let index = <i16>(tmp & ((<u64>(i != 0) << 4) | 0xf));
       if (index != 0) { start = true; }
       if (start) {
         let char = CHARACTER_MAP.charCodeAt(index);
