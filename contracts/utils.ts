@@ -1,4 +1,4 @@
-import * as EOS from "./eoslib"
+import * as eos from "./eoslib"
 import { DataStream } from "./datastream";
 import { allocate, HEADER_SIZE } from "../node_modules/assemblyscript/std/assembly/internal/string";
 
@@ -6,12 +6,12 @@ export const CHARACTER_MAP : string = ".12345abcdefghijklmnopqrstuvwxyz";
 
 @inline
 export function print(str: string) : void {
-  EOS.prints(str.toUTF8());
+  eos.prints(str.toUTF8());
 }
 
 @inline
 export function assert(condition: bool, msg : string = null) : void {
-  if(!condition) EOS.eosio_assert(0, msg ? msg.toUTF8() : 0);
+  if(!condition) eos.eosio_assert(0, msg ? msg.toUTF8() : 0);
 }
 
 @inline
@@ -33,15 +33,23 @@ export function N(str: string) : u64 {
 }
 
 export class Name {
-  value : u64;
+  protected _value : u64;
 
   constructor(name : string = "") {
-    this.value = N(name);
+    this._value = N(name);
   }
 
-  to_string() : string {
+  get value(): u64 {
+    return this._value;
+  }
+
+  set value(name: string): void {
+    this._value = N(name);
+  }
+
+  toString() : string {
     let s = allocate(13);
-    let tmp = this.value;
+    let tmp = this._value;
     let start = false;
     for (let i = 0; i < 13; i++) {
       // let index = <i16>(tmp & (i == 0 ? 0x0f : 0x1f));
@@ -55,12 +63,18 @@ export class Name {
     }
     return changetype<string>(s);
   }
+
+  @inline @operator('==')
+  function eq(a: Name, b: Name): bool {
+    return a.value == b.value;
+  }
 }
 
+// TODO similar method present in Contract class.
 export function get_ds() : DataStream {
-  let len : u32 = EOS.action_data_size();
+  let len : u32 = eos.action_data_size();
   let arr : Uint8Array = new Uint8Array(len);
-  EOS.read_action_data(changetype<usize>(arr.buffer), len);
+  eos.read_action_data(changetype<usize>(arr.buffer), len);
   let ds = new DataStream(changetype<usize>(arr.buffer), len);
   return ds;
 }

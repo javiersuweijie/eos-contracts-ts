@@ -8,12 +8,20 @@ import {
 
 export class DataStream {
 
-  pos: u32 = 0
+  protected _pos: u32 = 0
 
   constructor(
     public buffer: u32,
     public len:    u32
   ) {}
+
+  get currentPos(): u32 {
+    return this._pos;
+  }
+
+  skip(value: u32): void {
+    this._pos += value;
+  }
 
   readVarint32(): u32 {
     var value: u32 = 0;
@@ -35,19 +43,19 @@ export class DataStream {
   }
 
   store<T>(value : T) : void {
-    store<T>(this.buffer + this.pos, value);
-    this.pos += sizeof<T>();
+    store<T>(this.buffer + this._pos, value);
+    this._pos += sizeof<T>();
   }
 
   read<T>() : T {
-    var value : T = load<T>(this.buffer + this.pos);
-    this.pos += sizeof<T>();
+    var value : T = load<T>(this.buffer + this._pos);
+    this._pos += sizeof<T>();
     return value;
   }
 
-  readVector<T>() : T {
+  readVector<T>() : T[] {
     var len = this.readVarint32();
-    if( len == 0 ) return new Array<T>();
+    if( len == 0 ) return <T[]>[];
 
     var arr = new Array<T>(len);
     for(let i : u32 = 0; i < len; i++) {
@@ -63,7 +71,7 @@ export class DataStream {
     let s = allocate(len);
 
     var i: u32 = 0;
-    while(i<len) {
+    while(i < len) {
       let b : u16 = this.read<u8>();
       store<u16>(<usize>s + (i << 1), b, HEADER_SIZE);
       i++;
@@ -78,9 +86,9 @@ export class DataStream {
     if(len == 0) return;
 
     var ptr = str.toUTF8();
-        len = str.lengthUTF8;
+        len = str.lengthUTF8 - 1;
 
-    move_memory(this.buffer + this.pos, <usize>ptr, len - 1);
-    this.pos += len - 1;
+    move_memory(this.buffer + this._pos, <usize>ptr, len);
+    this._pos += len;
   }
 };

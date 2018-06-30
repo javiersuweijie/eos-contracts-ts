@@ -1,20 +1,13 @@
-import {env} from "./eoslib";
+import * as eos from "./eoslib";
 import {DataStream} from "./datastream";
 
 export class Contract {
+  constructor(public receiver: u64) {}
 
-    receiver : u64;
-  
-    constructor(receiver: u64) {
-      this.receiver = receiver;
-    }
-    
-    get_ds() : DataStream {
-      let len = env.action_data_size();
-      let arr = new Uint8Array(len);
-      read_action_data(<usize>arr.buffer, len);
-      let ds = new DataStream(<usize>arr.buffer, len);
-      return ds;
-    }
-  
+  get dataStream() : DataStream {
+    let len = eos.action_data_size();
+    let arr = new Uint8Array(len);
+    read_action_data(changetype<usize>(arr.buffer), len);
+    return new DataStream(changetype<usize>(arr.buffer), len);
   }
+}
