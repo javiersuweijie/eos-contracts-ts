@@ -39,10 +39,12 @@ export class Name {
     this._value = N(name);
   }
 
+  @inline
   get value(): u64 {
     return this._value;
   }
 
+  @inline
   set value(name: string): void {
     this._value = N(name);
   }
