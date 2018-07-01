@@ -1,0 +1,38 @@
+{
+  "version": "eosio::abi/1.0",
+  "structs": [
+    {
+      "name": "balance",
+      "fields": [
+        {"name": "account", "type": "name"},
+        {"name": "amount", "type": "asset"}
+      ]
+    },
+    {
+      "name": "withdraw",
+      "base": "",
+      "fields": [
+        {"name":"from", "type":"name"},
+        {"name":"to", "type":"name"},
+        {"name":"amount", "type":"asset"}
+      ]
+    }
+  ],
+  "actions": [{
+      "name": "withdraw",
+      "type": "withdraw"
+  }],
+  "tables": [
+    {
+      "name": "balances",
+      "type": "balance",
+      "index_type": "uint64",
+      "key_names": [
+        "account"
+      ],
+      "key_types": [
+        "name"
+      ]
+    }
+  ]
+}
