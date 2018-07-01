@@ -1,6 +1,7 @@
 import * as eos from "./eoslib"
 import { DataStream } from "./datastream";
 import { allocate, HEADER_SIZE } from "../node_modules/assemblyscript/std/assembly/internal/string";
+import { printi, printhex } from "./eoslib";
 
 export const CHARACTER_MAP : string = ".12345abcdefghijklmnopqrstuvwxyz";
 
@@ -32,6 +33,18 @@ export function N(str: string) : u64 {
   return name;
 }
 
+/* EOSIO stores names as a u64 number and uses the {CHARACTER_MAP} to map the integer with the character
+  For example, N('eosio')
+  01010 e
+  10100 o
+  11000 s
+  01110 i
+  10100 o
+  00000 .
+  ...
+  00000 .
+  0000  . (note the last character has only 4 bits)
+*/
 export class Name {
   protected _value : u64;
 
@@ -45,7 +58,12 @@ export class Name {
   }
 
   @inline
-  set value(name: string): void {
+  set value(value: u64) {
+    this._value = value;
+  }
+
+  @inline
+  setName(name : string) : void {
     this._value = N(name);
   }
 
@@ -54,11 +72,14 @@ export class Name {
     let tmp = this._value;
     let start = false;
     for (let i = 0; i < 13; i++) {
-      // let index = <i16>(tmp & (i == 0 ? 0x0f : 0x1f));
-      let index = <i16>(tmp & ((<u64>(i != 0) << 4) | 0xf));
-      if (index != 0) { start = true; }
+
+      let char5bit = <i16>(tmp & (i == 0 ? 0x0f : 0x1f));
+      if (char5bit != 0) { 
+        // skip if name is left padded by 0s
+        start = true; 
+      }
       if (start) {
-        let char = CHARACTER_MAP.charCodeAt(index);
+        let char = CHARACTER_MAP.charCodeAt(char5bit);
         store<u16>(changetype<usize>(s) + ((12 - i) << 1), char, HEADER_SIZE);
       }
       tmp >>= (i == 0 ? 4 : 5);
@@ -66,13 +87,40 @@ export class Name {
     return changetype<string>(s);
   }
 
-  @inline @operator('==')
-  function eq(a: Name, b: Name): bool {
+  @inline @operator("==")
+  eq(a : Name, b : Name) : bool {
     return a.value == b.value;
   }
+
 }
 
-// TODO similar method present in Contract class.
+export class Symbol {
+  precision : u64;
+  value : u64;
+  
+  constructor (value : u64) {
+    this.value = value;
+    this.precision = this.value & 0xff;
+  }
+
+  to_string() : string {
+    let s = allocate(7)
+    let len : usize = 0;
+    for (let i = 0; i < 7; i++) {
+      let char : i32 = <i32> (this.value >> (8 * (7 - i)) & 0xff);
+      if (char != 0) { 
+        i32.store16(changetype<usize>(s) + (len << 1), char, HEADER_SIZE);
+        len++;
+      }
+    }
+    i32.store(changetype<usize>(s), <i32>len);
+    //printi(load<i16>(changetype<usize>(s) + 4));
+    //printhex(changetype<usize>(s), 10);
+    return changetype<string>(s);
+  }
+
+}
+
 export function get_ds() : DataStream {
   let len : u32 = eos.action_data_size();
   let arr : Uint8Array = new Uint8Array(len);

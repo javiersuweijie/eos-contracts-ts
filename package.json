@@ -12,6 +12,7 @@
 
     "release:helloworld": "asc contracts/helloworld/*.ts -t build/helloworld/optimized.wast -b build/helloworld/optimized.wasm -O3 --noDebug --sourceMap --measure --noAssert --use abort=",
     "release:todolist": "asc contracts/todolist/*.ts -t build/todolist/optimized.wast -b build/todolist/optimized.wasm -O3 --noDebug --sourceMap --measure --noAssert --use abort=",
+    "release:bank": "asc contracts/bank/*.ts -t build/bank/optimized.wast -b build/bank/optimized.wasm -O3 --noDebug --sourceMap --measure --noAssert --use abort=",
     "release": "npm run release:helloworld && npm run release:todolist",
 
     "build": "npm run debug && npm run release"
