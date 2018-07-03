@@ -2,6 +2,7 @@ import * as eos from "./eoslib"
 import { DataStream } from "./datastream";
 import { allocate, HEADER_SIZE } from "../node_modules/assemblyscript/std/assembly/internal/string";
 import { printi, printhex } from "./eoslib";
+import { Data } from "./action";
 
 export const CHARACTER_MAP : string = ".12345abcdefghijklmnopqrstuvwxyz";
 
@@ -94,7 +95,7 @@ export class Name {
 
 }
 
-export class Symbol {
+export class Symbol implements Data {
   precision : u64;
   value : u64;
   
@@ -119,6 +120,16 @@ export class Symbol {
     return changetype<string>(s);
   }
 
+  to_ds() : DataStream {
+    let arr = new Int8Array(this.len());
+    let ds = new DataStream(changetype<usize>(arr.buffer), this.len());
+    ds.store<u64>(this.value);
+    return ds;
+  }
+
+  len() : i32 {
+    return 8;
+  }
 }
 
 export function get_ds() : DataStream {

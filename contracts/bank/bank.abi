@@ -12,7 +12,6 @@
       "name": "withdraw",
       "base": "",
       "fields": [
-        {"name":"from", "type":"name"},
         {"name":"to", "type":"name"},
         {"name":"amount", "type":"asset"}
       ]

@@ -5,6 +5,7 @@ import {
   HEADER_SIZE,
   allocate,
 } from "../node_modules/assemblyscript/std/assembly/internal/string";
+import { Data } from "./action";
 
 export class DataStream {
 
@@ -90,5 +91,16 @@ export class DataStream {
 
     move_memory(this.buffer + this._pos, <usize>ptr, len);
     this._pos += len;
+  }
+  
+  writeData<T>(data : T) : void {
+    var len : i32 = data.len();
+    var ds = data.to_ds();
+    move_memory(this.buffer + this._pos, changetype<usize>(ds.buffer), len);
+    this._pos += len;
+  }
+
+  reset() : void {
+    this._pos = 0;
   }
 };
