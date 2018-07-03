@@ -23,6 +23,9 @@ function char_to_symbol( c : i32 ) : u64 {
 }
 
 export function N(str: string) : u64 {
+  if (str.length > 12)
+    throw new TypeError('Input string exceeds 12 chars lengths limit');
+
   var name : u64 = 0;
   var i    : i32 = 0;
   var len  : i32 = str.length;
@@ -68,15 +71,16 @@ export class Name {
   }
 
   toString() : string {
-    let s = allocate(13);
-    let tmp = this._value;
-    let start = false;
+    var s = allocate(13);
+    var tmp = this._value;
+    var start = false;
+
     for (let i = 0; i < 13; i++) {
 
       let char5bit = <i16>(tmp & (i == 0 ? 0x0f : 0x1f));
-      if (char5bit != 0) { 
+      if (char5bit != 0) {
         // skip if name is left padded by 0s
-        start = true; 
+        start = true;
       }
       if (start) {
         let char = CHARACTER_MAP.charCodeAt(char5bit);
@@ -88,32 +92,31 @@ export class Name {
   }
 
   @inline @operator("==")
-  eq(a : Name, b : Name) : bool {
+  static eq(a : Name, b : Name) : bool {
     return a.value == b.value;
   }
-
 }
 
 export class Symbol {
   precision : u64;
   value : u64;
-  
+
   constructor (value : u64) {
     this.value = value;
     this.precision = this.value & 0xff;
   }
 
-  to_string() : string {
-    let s = allocate(7)
-    let len : usize = 0;
+  toString() : string {
+    var s = allocate(7)
+    var len : usize = 0;
     for (let i = 0; i < 7; i++) {
       let char : i32 = <i32> (this.value >> (8 * (7 - i)) & 0xff);
-      if (char != 0) { 
-        i32.store16(changetype<usize>(s) + (len << 1), char, HEADER_SIZE);
+      if (char != 0) {
+        store<u16>(changetype<usize>(s) + (len << 1), char, HEADER_SIZE);
         len++;
       }
     }
-    i32.store(changetype<usize>(s), <i32>len);
+    store<i32>(changetype<usize>(s), <i32>len);
     //printi(load<i16>(changetype<usize>(s) + 4));
     //printhex(changetype<usize>(s), 10);
     return changetype<string>(s);
@@ -122,9 +125,9 @@ export class Symbol {
 }
 
 export function get_ds() : DataStream {
-  let len : u32 = eos.action_data_size();
-  let arr : Uint8Array = new Uint8Array(len);
+  var len : u32 = eos.action_data_size();
+  var arr : Uint8Array = new Uint8Array(len);
   eos.read_action_data(changetype<usize>(arr.buffer), len);
-  let ds = new DataStream(changetype<usize>(arr.buffer), len);
+  var ds = new DataStream(changetype<usize>(arr.buffer), len);
   return ds;
 }
