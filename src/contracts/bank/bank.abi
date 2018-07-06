@@ -1,0 +1,53 @@
+{
+  "version": "eosio::abi/1.0",
+  "structs": [
+    {
+      "name": "balance",
+      "fields": [
+        {"name": "account", "type": "name"},
+        {"name": "amount", "type": "uint64"}
+      ]
+    },
+    {
+      "name": "withdraw",
+      "base": "",
+      "fields": [
+        {"name":"to", "type":"name"},
+        {"name":"amount", "type":"asset"}
+      ]
+    },
+    {
+      "name": "getsymbol"
+    },
+    {
+      "name": "refundall"
+    }
+  ],
+  "actions": [
+    {
+      "name": "withdraw",
+      "type": "withdraw"
+    },
+    {
+      "name": "getsymbol",
+      "type": "getsymbol"
+    },
+    {
+      "name": "refundall",
+      "type": "refundall"
+    }
+  ],
+  "tables": [
+    {
+      "name": "balances",
+      "type": "balance",
+      "index_type": "i64",
+      "key_names": [
+        "account"
+      ],
+      "key_types": [
+        "name"
+      ]
+    }
+  ]
+}
