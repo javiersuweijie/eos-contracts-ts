@@ -1,6 +1,6 @@
 import 'allocator/arena';
-import * as eos from "../eoslib";
-import { print } from "../utils";
+import * as eos from "../../lib/eoslib";
+import { print } from "../../lib/utils";
 
 class Memory {
     value1 : i32;

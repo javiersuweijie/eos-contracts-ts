@@ -1,7 +1,7 @@
 import 'allocator/arena';
-import * as eos from '../eoslib';
-import { Name, print } from '../utils';
-import { DataStream } from '../datastream';
+import * as eos from '../../lib/eoslib';
+import { Name, print } from '../../lib/utils';
+import { DataStream } from '../../lib/datastream';
 
 class Message {
     account: Name;

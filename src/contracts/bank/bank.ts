@@ -1,8 +1,8 @@
 import 'allocator/arena';
-import {printn, printi, prints, send_inline, printhex, db_find_i64, db_get_i64, db_store_i64, db_lowerbound_i64, db_next_i64, db_remove_i64, db_update_i64} from "../eoslib";
-import { N, print, get_ds, Name, assert } from "../utils";
-import { DataStream } from '../datastream';
-import { Authorization, TransferData, Action, Data, Asset } from '../action';
+import {printn, printi, prints, send_inline, printhex, db_find_i64, db_get_i64, db_store_i64, db_lowerbound_i64, db_next_i64, db_remove_i64, db_update_i64} from "../../lib/eoslib";
+import { N, print, get_ds, Name, assert } from "../../lib/utils";
+import { DataStream } from '../../lib/datastream';
+import { Authorization, TransferData, Action, Data, Asset } from '../../lib/action';
 import { Symbol, S } from '../../lib/types/symbol';
 
 class BankContract {

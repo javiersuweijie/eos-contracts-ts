@@ -1,8 +1,7 @@
 import 'allocator/arena';
-import * as eos from '../eoslib';
-import { DataStream } from '../datastream';
-import { get_ds, N, assert, print, Name } from '../utils';
-import { db_find_i64, printi, require_auth } from '../eoslib';
+import { DataStream } from '../../lib/datastream';
+import { get_ds, N, assert, print, Name } from '../../lib/utils';
+import { db_find_i64, printi, require_auth, db_end_i64, db_get_i64, db_remove_i64, db_lowerbound_i64, db_previous_i64, db_update_i64, db_store_i64, db_next_i64 } from '../../lib/eoslib';
 
 class Todo {
     primary: u64;
@@ -63,15 +62,15 @@ class TodoContract {
 
     add(task : string, creator : u64) : void {
         assert(task.length > 0, "Task is empty");
-        eos.require_auth(creator);
+        require_auth(creator);
         let key : u64 = 0;
-        let end : i32 = eos.db_end_i64(this.code, this.scope, this.table);
-        let iterator : i32 = eos.db_lowerbound_i64(this.code, this.scope, this.table, 0);
+        let end : i32 = db_end_i64(this.code, this.scope, this.table);
+        let iterator : i32 = db_lowerbound_i64(this.code, this.scope, this.table, 0);
         if (iterator != end) {
-            iterator = eos.db_previous_i64(end, offsetof<this>("primary"));
-            let len = eos.db_get_i64(iterator, 0, 0);
+            iterator = db_previous_i64(end, offsetof<this>("primary"));
+            let len = db_get_i64(iterator, 0, 0);
             let arr = new Uint8Array(len);
-            eos.db_get_i64(iterator, changetype<usize>(arr.buffer), len);
+            db_get_i64(iterator, changetype<usize>(arr.buffer), len);
             let ds = new DataStream(changetype<usize>(arr.buffer), len);
             let last_todo = new Todo();
             last_todo.from_ds(ds);
@@ -85,22 +84,22 @@ class TodoContract {
         todo.completed = false;
         todo.task = task;
         let ds_to_save = todo.to_ds();
-        iterator = eos.db_store_i64(this.scope, this.table, creator, todo.primary, ds_to_save.buffer, ds_to_save.currentPos);
+        iterator = db_store_i64(this.scope, this.table, creator, todo.primary, ds_to_save.buffer, ds_to_save.currentPos);
     }
 
     removeAll() : void {
-        let iterator = eos.db_lowerbound_i64(this.code, this.scope, this.table, 0);
+        let iterator = db_lowerbound_i64(this.code, this.scope, this.table, 0);
         let i : i32 = 0;
         while (iterator >= 0) {
             let del = iterator;
-            iterator = eos.db_next_i64(iterator, changetype<usize>(this) + offsetof<this>("primary"));
+            iterator = db_next_i64(iterator, changetype<usize>(this) + offsetof<this>("primary"));
             //print("\nPrimary: ");
-            //eos.printi(this.primary);
-            eos.db_remove_i64(del);
+            //printi(this.primary);
+            db_remove_i64(del);
             i++;
           }
         print("Removed ");
-        eos.printi(i);
+        printi(i);
     }
 
     update(key : u64, completed : bool) : void {
@@ -108,13 +107,13 @@ class TodoContract {
         require_auth(todo.creator);
         todo.completed = completed;
         let ds = todo.to_ds();
-        eos.db_update_i64(todo.iterator, todo.creator, changetype<usize>(ds.buffer), ds.currentPos);
+        db_update_i64(todo.iterator, todo.creator, changetype<usize>(ds.buffer), ds.currentPos);
     }
 
     remove(key : u64) : void {
         let todo = this.getTodoByKey(key);
         require_auth(todo.creator);
-        eos.db_remove_i64(todo.iterator);
+        db_remove_i64(todo.iterator);
     }
 
     assign(key : u64, assignee : u64) : void {
@@ -122,15 +121,15 @@ class TodoContract {
         require_auth(todo.creator);
         todo.assignee = assignee;
         let ds = todo.to_ds();
-        eos.db_update_i64(todo.iterator, todo.creator, changetype<usize>(ds.buffer), ds.currentPos);
+        db_update_i64(todo.iterator, todo.creator, changetype<usize>(ds.buffer), ds.currentPos);
     }
 
     private getTodoByKey(key : u64) : Todo {
-        let iterator = eos.db_find_i64(this.code, this.scope, this.table, key);
-        let len = eos.db_get_i64(iterator, 0, 0);
+        let iterator = db_find_i64(this.code, this.scope, this.table, key);
+        let len = db_get_i64(iterator, 0, 0);
         assert(len >= 0, "invalid length");
         let arr = new Uint8Array(len);
-        eos.db_get_i64(iterator, changetype<usize>(arr.buffer), len);
+        db_get_i64(iterator, changetype<usize>(arr.buffer), len);
 
         let output = new DataStream(changetype<usize>(arr.buffer), len);
         let todo = new Todo();

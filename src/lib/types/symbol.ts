@@ -1,7 +1,6 @@
-import { Data } from "../../contracts/action";
+import { Data } from "../action";
 import { allocate, HEADER_SIZE } from "../../../node_modules/assemblyscript/std/assembly/internal/string";
-import { printi } from "../../contracts/eoslib";
-import { print } from "../../contracts/utils";
+import { DataStream } from "../datastream";
 
 export class Symbol implements Data {
   precision : u64;
