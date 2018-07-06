@@ -6,15 +6,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
 
-    "debug:helloworld": "mkdir -p build/helloworld && asc contracts/helloworld/*.ts -t build/helloworld/untouched.wast --sourceMap --measure --noAssert --use abort=",
-    "debug:todolist": "mkdir -p build/todolist && asc contracts/todolist/*.ts -t build/todolist/untouched.wast --sourceMap --measure --noAssert --use abort=",
-    "debug:bank": "mkdir -p build/bank asc contracts/bank/*.ts -t build/bank/optimized.wast --sourceMap --measure --noAssert --use abort=",
-    "debug": "npm run debug:helloworld && npm run debug:todolist",
+    "debug:helloworld": "mkdir -p build/helloworld && asc src/contracts/helloworld/*.ts -t build/helloworld/untouched.wast --sourceMap --measure --noAssert --use abort=",
+    "debug:todolist": "mkdir -p build/todolist && asc src/contracts/todolist/*.ts -t build/todolist/untouched.wast --sourceMap --measure --noAssert --use abort=",
+    "debug:bank": "mkdir -p build/bank asc src/contracts/bank/*.ts -t build/bank/optimized.wast --sourceMap --measure --noAssert --use abort=",
+    "debug": "npm run debug:helloworld && npm run debug:todolist && npm run debug:bank",
 
-    "release:helloworld": "mkdir -p build/helloworld && asc contracts/helloworld/*.ts -t build/helloworld/optimized.wast -b build/helloworld/optimized.wasm -O3 --noDebug --sourceMap --measure --noAssert --use abort=",
-    "release:todolist": "mkdir -p build/helloworld && asc contracts/todolist/*.ts -t build/todolist/optimized.wast -b build/todolist/optimized.wasm -O3 --noDebug --sourceMap --measure --noAssert --use abort=",
-    "release:bank": "mkdir -p build/bank && asc contracts/bank/*.ts -t build/bank/optimized.wast -b build/bank/optimized.wasm -O3 --noDebug --sourceMap --measure --noAssert --use abort=",
-    "release": "npm run release:helloworld && npm run release:todolist",
+    "release:helloworld": "mkdir -p build/helloworld && asc src/contracts/helloworld/*.ts -t build/helloworld/optimized.wast -b build/helloworld/optimized.wasm -O3 --noDebug --sourceMap --measure --noAssert --use abort=",
+    "release:todolist": "mkdir -p build/helloworld && asc src/contracts/todolist/*.ts -t build/todolist/optimized.wast -b build/todolist/optimized.wasm -O3 --noDebug --sourceMap --measure --noAssert --use abort=",
+    "release:bank": "mkdir -p build/bank && asc src/contracts/bank/bank.ts -t build/bank/optimized.wast -b build/bank/optimized.wasm -O3 --noDebug --sourceMap --measure --noAssert --use abort=",
+    "release": "npm run release:helloworld && npm run release:todolist && npm run release:bank",
 
     "build": "npm run debug && npm run release"
   },

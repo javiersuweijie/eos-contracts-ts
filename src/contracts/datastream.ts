@@ -4,7 +4,7 @@
 import {
   HEADER_SIZE,
   allocate,
-} from "../node_modules/assemblyscript/std/assembly/internal/string";
+} from "../../node_modules/assemblyscript/std/assembly/internal/string";
 import { Data } from "./action";
 
 export class DataStream {

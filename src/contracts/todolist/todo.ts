@@ -36,7 +36,7 @@ class Todo {
         creator.value = this.creator;
         let assignee = new Name();
         assignee.value = this.assignee;
-        return this.task.concat("|").concat(assignee.to_string()).concat("|").concat(creator.to_string());
+        return this.task.concat("|").concat(assignee.toString()).concat("|").concat(creator.toString());
     }
 }
 
@@ -85,7 +85,7 @@ class TodoContract {
         todo.completed = false;
         todo.task = task;
         let ds_to_save = todo.to_ds();
-        iterator = eos.db_store_i64(this.scope, this.table, creator, todo.primary, ds_to_save.buffer, ds_to_save.pos);
+        iterator = eos.db_store_i64(this.scope, this.table, creator, todo.primary, ds_to_save.buffer, ds_to_save.currentPos);
     }
 
     removeAll() : void {
@@ -108,7 +108,7 @@ class TodoContract {
         require_auth(todo.creator);
         todo.completed = completed;
         let ds = todo.to_ds();
-        eos.db_update_i64(todo.iterator, todo.creator, changetype<usize>(ds.buffer), ds.pos);
+        eos.db_update_i64(todo.iterator, todo.creator, changetype<usize>(ds.buffer), ds.currentPos);
     }
 
     remove(key : u64) : void {
@@ -122,7 +122,7 @@ class TodoContract {
         require_auth(todo.creator);
         todo.assignee = assignee;
         let ds = todo.to_ds();
-        eos.db_update_i64(todo.iterator, todo.creator, changetype<usize>(ds.buffer), ds.pos);
+        eos.db_update_i64(todo.iterator, todo.creator, changetype<usize>(ds.buffer), ds.currentPos);
     }
 
     private getTodoByKey(key : u64) : Todo {

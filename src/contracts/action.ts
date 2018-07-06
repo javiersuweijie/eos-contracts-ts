@@ -1,5 +1,4 @@
 import { DataStream } from "./datastream";
-import { print, Symbol } from "./utils";
 
 /*
 {
@@ -20,9 +19,12 @@ import { print, Symbol } from "./utils";
 */
 
 export class Data {
-  to_ds() : DataStream {return <DataStream>null};
+  to_ds() : DataStream {
+      assert(0, "Not to be called");
+      return <DataStream>null
+    };
   len() : i32 {
-      print("Not to be called");
+      assert(0, "Not to be called");
       return 0
     };
 }
@@ -101,6 +103,7 @@ export class Asset implements Data {
         public amount : u64,
         public symbol : u64
     ) {}
+
     to_ds() : DataStream {
         let arr = new Int8Array(this.len());
         let ds = new DataStream(changetype<usize>(arr.buffer), this.len());
@@ -111,5 +114,10 @@ export class Asset implements Data {
 
     len() : i32 {
         return 16;
+    }
+
+    from_ds(ds : DataStream) : void {
+        this.amount = ds.read<u64>();
+        this.symbol = ds.read<u64>();
     }
 }
