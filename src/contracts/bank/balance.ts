@@ -27,4 +27,8 @@ export class Balance implements Data {
     static from_ds(ds : DataStream) : Balance {
         return new Balance(ds.read<u64>(), ds.read<u64>());
     }
+
+    static len() : i32 {
+        return 16;
+    }
 }

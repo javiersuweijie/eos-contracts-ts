@@ -10,7 +10,7 @@ export function print(str: string) : void {
 }
 
 @inline
-export function assert(condition: bool, msg : string = null) : void {
+export function eosio_assert(condition: bool, msg : string = null) : void {
   if(!condition) eos.eosio_assert(0, msg ? msg.toUTF8() : 0);
 }
 
