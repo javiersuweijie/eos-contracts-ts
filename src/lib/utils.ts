@@ -1,8 +1,6 @@
 import * as eos from "./eoslib"
-import { DataStream } from "./datastream";
+import { DataStream } from "./Datastream";
 import { allocate, HEADER_SIZE } from "../../node_modules/assemblyscript/std/assembly/internal/string";
-import { printi, printhex } from "./eoslib";
-import { Data } from "./action";
 
 export const CHARACTER_MAP : string = ".12345abcdefghijklmnopqrstuvwxyz";
 

@@ -1,5 +1,5 @@
 import 'allocator/arena';
-import { DataStream } from '../../lib/datastream';
+import { DataStream } from '../../lib/Datastream';
 import { get_ds, N, assert, print, Name } from '../../lib/utils';
 import { db_find_i64, printi, require_auth, db_end_i64, db_get_i64, db_remove_i64, db_lowerbound_i64, db_previous_i64, db_update_i64, db_store_i64, db_next_i64 } from '../../lib/eoslib';
 
