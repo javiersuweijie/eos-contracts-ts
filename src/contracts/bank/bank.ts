@@ -104,6 +104,7 @@ export function apply(receiver : u64, code : u64, action : u64) : void {
     if (code == N("eosio.token") && action == N("transfer")) {
         print("\ntransfer action called");
         bankContract.onTransfer(
+            
             ds.read<u64>(),
             ds.read<u64>(),
             ds.read<u64>(),

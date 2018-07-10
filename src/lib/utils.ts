@@ -1,6 +1,10 @@
 import * as eos from "./eoslib"
 import { DataStream } from "./Datastream";
 import { allocate, HEADER_SIZE } from "../../node_modules/assemblyscript/std/assembly/internal/string";
+import { Authorization } from "./types/Authorization";
+import { Asset, TransferData } from "./TransferData";
+import { S } from "./types/Symbol";
+import { Action } from "./types/Action";
 
 export const CHARACTER_MAP : string = ".12345abcdefghijklmnopqrstuvwxyz";
 
@@ -103,4 +107,14 @@ export function get_ds() : DataStream {
   eos.read_action_data(changetype<usize>(arr.buffer), len);
   var ds = new DataStream(changetype<usize>(arr.buffer), len);
   return ds;
+}
+
+
+export function createTransferAction(contract_name : u64, from : u64, to : u64, amount : Asset, memo : string, auth : u64) : DataStream {
+  //from, to, amount, memo (withdraw)
+  let auths = new Array<Authorization>();
+  auths.push(new Authorization(auth, N("active")))
+  let tx_data = new TransferData(auth, to, amount, memo);
+  let action = new Action<TransferData>(contract_name, N("transfer"), auths, <TransferData> tx_data);
+  return action.to_ds();
 }

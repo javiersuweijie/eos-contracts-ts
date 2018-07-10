@@ -24,7 +24,7 @@ export class TransferData implements Data {
     }
 }
 
-export class Asset implements Data {
+export class Asset {
     constructor(
         public amount : u64,
         public symbol : u64

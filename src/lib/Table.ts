@@ -18,11 +18,13 @@ export class Table {
     }
 
     create<T>(payer: u64, key : u64, entity: T, scope : u64) : void {
+        // work around as inheritance is incomplete
         let ds = entity.to_ds();
         db_store_i64(scope, this.table_name, payer, key, changetype<usize>(ds.buffer), ds.currentPos);
     }
 
     updateByIterator<T>(iter : i32, payer : u64, entity : T) : void {
+        // work around as inheritance is incomplete
         let ds = entity.to_ds();
         db_update_i64(iter, payer, changetype<usize>(ds.buffer), ds.currentPos);
     }
@@ -40,7 +42,6 @@ export class Table {
         }
         free_memory(key_p);
     }
-
     filter(): T {
         throw new Error("Method not implemented.");
     }

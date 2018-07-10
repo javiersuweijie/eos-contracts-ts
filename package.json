@@ -14,6 +14,7 @@
     "release:helloworld": "mkdir -p build/helloworld && asc src/contracts/helloworld/*.ts -t build/helloworld/optimized.wast -b build/helloworld/optimized.wasm -O3 --noDebug --sourceMap --measure --noAssert --use abort=",
     "release:todolist": "mkdir -p build/helloworld && asc src/contracts/todolist/*.ts -t build/todolist/optimized.wast -b build/todolist/optimized.wasm -O3 --noDebug --sourceMap --measure --noAssert --use abort=",
     "release:bank": "mkdir -p build/bank && asc src/contracts/bank/bank.ts -t build/bank/optimized.wast -b build/bank/optimized.wasm -O3 --noDebug --sourceMap --measure --noAssert --use abort=",
+    "release:token": "mkdir -p build/token && asc src/contracts/token/token.ts -t build/token/optimized.wast -b build/token/optimized.wasm -O3 --noDebug --sourceMap --measure --noAssert --use abort=",
     "release": "npm run release:helloworld && npm run release:todolist && npm run release:bank",
 
     "build": "npm run debug && npm run release"

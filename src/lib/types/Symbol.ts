@@ -27,6 +27,10 @@ export class Symbol implements Data {
     return changetype<string>(s);
   }
 
+  toName() : u64 {
+    return this.value >> 8;
+  }
+
   to_ds() : DataStream {
     let arr = new Int8Array(this.len());
     let ds = new DataStream(changetype<usize>(arr.buffer), this.len());
