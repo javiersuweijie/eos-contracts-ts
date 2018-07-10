@@ -1,4 +1,4 @@
-import "allocator/tlsf";
+import "allocator/arena";
 import { N, print, eosio_assert, get_ds, createTransferAction } from "../../lib/utils";
 import { Table } from "../../lib/Table";
 import { Asset } from "../../lib/TransferData";
