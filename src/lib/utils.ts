@@ -26,8 +26,7 @@ function char_to_symbol( c : i32 ) : u64 {
 }
 
 export function N(str: string) : u64 {
-  if (str.length > 12)
-    throw new TypeError('Input string exceeds 12 chars lengths limit');
+  eosio_assert(str.length <= 12, 'Input string exceeds 12 chars lengths limit');
 
   var name : u64 = 0;
   var i    : i32 = 0;
